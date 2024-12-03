@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"testing"
@@ -27,7 +27,7 @@ func TestGetTodayAndYesterday(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function
-			actualToday, actualYesterday := getTodayAndYesterday()
+			actualYesterday, actualToday := getTodayAndYesterday()
 
 			// Validate the results with assertions
 			assert.Equal(t, tc.expectedToday, actualToday, "Mismatch for today in test: %s", tc.name)
