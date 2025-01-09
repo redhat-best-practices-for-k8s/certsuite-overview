@@ -30,18 +30,29 @@ jobs:
 
       - name: Build certsuite-overview project
         run: |
+          set -e
+          echo "Building certsuite-overview..."
           cd cmd
           go build -o ../certsuite-overview
 
+      - name: Verify certsuite-overview commands
+        run: |
+          set -e
+          echo "Verifying available commands..."
+          ./certsuite-overview --help
+
       - name: Run the certsuite-overview project
-        run: ./certsuite-overview jobs \
-          --DB_USER ${{ secrets.DB_USER }} \
-          --DB_PASSWORD ${{ secrets.DB_PASSWORD }} \
-          --DB_URL ${{ secrets.DB_URL }} \
-          --DB_PORT ${{ secrets.DB_PORT }} \
-          --DB_NAME ${{ secrets.DB_NAME }} \
-          --CLIENTID ${{ secrets.CLIENTID }} \
-          --APISECRET ${{ secrets.APISECRET }} \
-          --BEARERTOKEN ${{ secrets.BEARERTOKEN }} \
-          --NAMESPACE ${{ vars.NAMESPACE }} \
-          --REPOSITORY ${{ vars.REPOSITORY }}
+        run: |
+          set -e
+          echo "Running certsuite-overview..."
+          ./certsuite-overview correct-subcommand \ # Replace 'correct-subcommand' with the actual command
+            --DB_USER ${{ secrets.DB_USER }} \
+            --DB_PASSWORD ${{ secrets.DB_PASSWORD }} \
+            --DB_URL ${{ secrets.DB_URL }} \
+            --DB_PORT ${{ secrets.DB_PORT }} \
+            --DB_NAME ${{ secrets.DB_NAME }} \
+            --CLIENTID ${{ secrets.CLIENTID }} \
+            --APISECRET ${{ secrets.APISECRET }} \
+            --BEARERTOKEN ${{ secrets.BEARERTOKEN }} \
+            --NAMESPACE ${{ vars.NAMESPACE }} \
+            --REPOSITORY ${{ vars.REPOSITORY }}
