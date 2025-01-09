@@ -1,68 +1,72 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
 )
+type Config struct {
+	DBUser      string
+	DBPassword  string
+	DBURL       string
+	DBPort      string
+	DBName      string
+	ClientID    string
+	APISecret   string
+	BearerToken string
+	Namespace   string
+	Repository  string
+}
+
+var config Config
 
 // Command for 'fetch' action
 var fetchCmd = &cobra.Command{
 	Use:   "fetch",
 	Short: "Fetch certsuite usage from Quay and DCI",
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
 		// Get values from flags
-		dbUser, err := cmd.Flags().GetString("DB_USER")
+		config.DBUser, err = cmd.Flags().GetString("DB_USER")
 		if err != nil {
 			log.Fatalf("Error fetching DB_USER: %v", err)
 		}
-		fmt.Println(dbUser)
-		dbPassword, err := cmd.Flags().GetString("DB_PASSWORD")
+		config.DBPassword, err = cmd.Flags().GetString("DB_PASSWORD")
 		if err != nil {
 			log.Fatalf("Error fetching DB_PASSWORD: %v", err)
 		}
-		fmt.Println(dbPassword)
-		dbURL, err := cmd.Flags().GetString("DB_URL")
+		config.DBURL, err = cmd.Flags().GetString("DB_URL")
 		if err != nil {
 			log.Fatalf("Error fetching DB_URL: %v", err)
 		}
-		fmt.Println(dbURL)
-		dbPort, err := cmd.Flags().GetString("DB_PORT")
+		config.DBPort, err = cmd.Flags().GetString("DB_PORT")
 		if err != nil {
 			log.Fatalf("Error fetching DB_PORT: %v", err)
 		}
-		fmt.Println(dbPort)
-		dbName, err := cmd.Flags().GetString("DB_NAME")
+		config.DBName, err = cmd.Flags().GetString("DB_NAME")
 		if err != nil {
 			log.Fatalf("Error fetching DB_NAME: %v", err)
 		}
-		fmt.Println(dbName)
-		clientID, err := cmd.Flags().GetString("CLIENTID")
+		config.ClientID, err = cmd.Flags().GetString("CLIENTID")
 		if err != nil {
 			log.Fatalf("Error fetching CLIENTID: %v", err)
 		}
-		fmt.Println(clientID)
-		apiSecret, err := cmd.Flags().GetString("APISECRET")
+		config.APISecret, err = cmd.Flags().GetString("APISECRET")
 		if err != nil {
 			log.Fatalf("Error fetching APISECRET: %v", err)
 		}
-		fmt.Println(apiSecret)
-		bearerToken, err := cmd.Flags().GetString("BEARERTOKEN")
+		config.BearerToken, err = cmd.Flags().GetString("BEARERTOKEN")
 		if err != nil {
 			log.Fatalf("Error fetching BEARERTOKEN: %v", err)
 		}
-		fmt.Println(bearerToken)
-		namespace, err := cmd.Flags().GetString("NAMESPACE")
+		config.Namespace, err = cmd.Flags().GetString("NAMESPACE")
 		if err != nil {
 			log.Fatalf("Error fetching NAMESPACE: %v", err)
 		}
-		fmt.Println(namespace)
-		repository, err := cmd.Flags().GetString("REPOSITORY")
+		config.Repository, err = cmd.Flags().GetString("REPOSITORY")
 		if err != nil {
 			log.Fatalf("Error fetching REPOSITORY: %v", err)
 		}
-		fmt.Println(repository)
 		// Call the function to fetch certsuite usage
 		err = FetchCertsuiteUsage()
 		if err != nil {
