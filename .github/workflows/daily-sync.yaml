@@ -24,22 +24,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.23"
-      
-      - name: Pre-check API tokens
-        run: |
-          set -e
-          echo "Checking API tokens..."
-    
-          # Validate connection to the Quay API
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "https://quay.io/api/v1/" \
-            -H "Authorization: Bearer ${{ secrets.BEARERTOKEN }}")
-
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Token pre-check failed! HTTP status: $RESPONSE. Exiting."
-            exit 1
-          fi
-
-          echo "Token pre-check passed! Connection to Quay API successful."
 
       - name: List files in the repository
         run: ls -R
