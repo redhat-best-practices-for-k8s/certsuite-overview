@@ -23,6 +23,20 @@ var rootCmd = &cobra.Command{
 	Short: "A CLI to interact with certsuite data",
 }
 
+func init() {
+	// Define flags for the certsuite-overview command
+	rootCmd.PersistentFlags().String("DB_USER", "", "Database user")
+	rootCmd.PersistentFlags().String("DB_PASSWORD", "", "Database password")
+	rootCmd.PersistentFlags().String("DB_URL", "", "Database URL")
+	rootCmd.PersistentFlags().String("DB_PORT", "", "Database port")
+	rootCmd.PersistentFlags().String("DB_NAME", "", "Database name")
+	rootCmd.PersistentFlags().String("CLIENTID", "", "Client ID")
+	rootCmd.PersistentFlags().String("APISECRET", "", "API Secret")
+	rootCmd.PersistentFlags().String("BEARERTOKEN", "", "Bearer Token")
+	rootCmd.PersistentFlags().String("NAMESPACE", "", "Namespace")
+	rootCmd.PersistentFlags().String("REPOSITORY", "", "Repository")
+}
+
 func main() {
 	// Add fetchCmd to root command
 	rootCmd.AddCommand(fetchCmd)
