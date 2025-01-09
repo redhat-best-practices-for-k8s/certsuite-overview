@@ -19,7 +19,7 @@ var fetchCmd = &cobra.Command{
 
 // Root command
 var rootCmd = &cobra.Command{
-	Use:   "certsuite-cli",
+	Use:   "certsuite-overview",
 	Short: "A CLI to interact with certsuite data",
 }
 
