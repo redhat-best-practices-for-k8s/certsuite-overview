@@ -3,22 +3,9 @@ package main
 import (
 	"log"
 
+	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
 	"github.com/spf13/cobra"
 )
-type Config struct {
-	DBUser      string
-	DBPassword  string
-	DBURL       string
-	DBPort      string
-	DBName      string
-	ClientID    string
-	APISecret   string
-	BearerToken string
-	Namespace   string
-	Repository  string
-}
-
-var config Config
 
 // Command for 'fetch' action
 var fetchCmd = &cobra.Command{
@@ -27,43 +14,43 @@ var fetchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		// Get values from flags
-		config.DBUser, err = cmd.Flags().GetString("DB_USER")
+		config.AppConfig.DBUser, err = cmd.Flags().GetString("DB_USER")
 		if err != nil {
 			log.Fatalf("Error fetching DB_USER: %v", err)
 		}
-		config.DBPassword, err = cmd.Flags().GetString("DB_PASSWORD")
+		config.AppConfig.DBPassword, err = cmd.Flags().GetString("DB_PASSWORD")
 		if err != nil {
 			log.Fatalf("Error fetching DB_PASSWORD: %v", err)
 		}
-		config.DBURL, err = cmd.Flags().GetString("DB_URL")
+		config.AppConfig.DBURL, err = cmd.Flags().GetString("DB_URL")
 		if err != nil {
 			log.Fatalf("Error fetching DB_URL: %v", err)
 		}
-		config.DBPort, err = cmd.Flags().GetString("DB_PORT")
+		config.AppConfig.DBPort, err = cmd.Flags().GetString("DB_PORT")
 		if err != nil {
 			log.Fatalf("Error fetching DB_PORT: %v", err)
 		}
-		config.DBName, err = cmd.Flags().GetString("DB_NAME")
+		config.AppConfig.DBName, err = cmd.Flags().GetString("DB_NAME")
 		if err != nil {
 			log.Fatalf("Error fetching DB_NAME: %v", err)
 		}
-		config.ClientID, err = cmd.Flags().GetString("CLIENTID")
+		config.AppConfig.ClientID, err = cmd.Flags().GetString("CLIENTID")
 		if err != nil {
 			log.Fatalf("Error fetching CLIENTID: %v", err)
 		}
-		config.APISecret, err = cmd.Flags().GetString("APISECRET")
+		config.AppConfig.APISecret, err = cmd.Flags().GetString("APISECRET")
 		if err != nil {
 			log.Fatalf("Error fetching APISECRET: %v", err)
 		}
-		config.BearerToken, err = cmd.Flags().GetString("BEARERTOKEN")
+		config.AppConfig.BearerToken, err = cmd.Flags().GetString("BEARERTOKEN")
 		if err != nil {
 			log.Fatalf("Error fetching BEARERTOKEN: %v", err)
 		}
-		config.Namespace, err = cmd.Flags().GetString("NAMESPACE")
+		config.AppConfig.Namespace, err = cmd.Flags().GetString("NAMESPACE")
 		if err != nil {
 			log.Fatalf("Error fetching NAMESPACE: %v", err)
 		}
-		config.Repository, err = cmd.Flags().GetString("REPOSITORY")
+		config.AppConfig.Repository, err = cmd.Flags().GetString("REPOSITORY")
 		if err != nil {
 			log.Fatalf("Error fetching REPOSITORY: %v", err)
 		}

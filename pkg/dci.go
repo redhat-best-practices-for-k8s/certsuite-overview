@@ -3,10 +3,11 @@ package pkg
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	dci "github.com/sebrandon1/go-dci/lib"
+	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
+	
 )
 
 const (
@@ -15,12 +16,9 @@ const (
 
 func FetchDciData() error {
 	var totalErrors, totalFailures, totalSkips, totalSuccess int
-	
-	ClientID := os.Getenv("CLIENTID")
-	APISecret := os.Getenv("APISECRET")
 
 	// Initialize DCI client
-	dciClient := dci.NewClient(ClientID, APISecret)
+	dciClient := dci.NewClient(config.AppConfig.ClientID, config.AppConfig.APISecret)
 
 	// Initialize database connection
 	db, err := chooseDatabase()

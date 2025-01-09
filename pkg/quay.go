@@ -3,12 +3,12 @@ package pkg
 import (
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	quay "github.com/sebrandon1/go-quay/lib"
+	"github.com/redhat-best-practices-for-k8s/certsuite-overview/config"
 )
 
 const (
@@ -17,10 +17,6 @@ const (
 
 // fetchQuayData fetches the number of image pulls from Quay.
 func FetchQuayData() error {
-	bearerToken := os.Getenv("BEARERTOKEN")
-	namespace := os.Getenv("NAMESPACE")
-	repository := os.Getenv("REPOSITORY")
-
 	// Initialize database connection
 	db, err := chooseDatabase()
 	if err != nil {
@@ -33,8 +29,8 @@ func FetchQuayData() error {
 	}()
 
 	// Initialize Quay client
-	quayClient, err := quay.NewClient(bearerToken)
-	log.Printf("my bearerToke is %v",bearerToken)
+	quayClient, err := quay.NewClient(config.AppConfig.BearerToken)
+	log.Printf("my bearerToke is %v",config.AppConfig.BearerToken)
 	if err != nil {
 		return fmt.Errorf("failed to initialize Quay client: %w", err)
 	}
@@ -43,7 +39,7 @@ func FetchQuayData() error {
 	startDate, endDate := getTodayAndYesterday()
 
 	// Fetch aggregated logs from Quay
-	data, err := quayClient.GetAggregatedLogs(namespace, repository, startDate, endDate)
+	data, err := quayClient.GetAggregatedLogs(config.AppConfig.Namespace, config.AppConfig.Repository, startDate, endDate)
 	if err != nil {
 		return fmt.Errorf("failed to fetch aggregated logs from Quay: %w", err)
 	}
