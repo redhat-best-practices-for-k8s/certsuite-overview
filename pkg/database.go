@@ -8,7 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3" // for SQLite
 	"github.com/sirupsen/logrus"
 )
-
+/*
 // initDBLocal initializes a local SQLite database and ensures required tables exist.
 func initDBLocal() (*sql.DB, error) {
 	logrus.Info("Opening the local SQLite database connection...")
@@ -28,8 +28,8 @@ func initDBLocal() (*sql.DB, error) {
 
 	logrus.Info("Local SQLite database initialized successfully.")
 	return db, nil
-}
-
+}*/
+/*
 // initDBAWS initializes a MySQL database connection using AWS credentials.
 func initDBAWS() (*sql.DB, error) {
 	logrus.Info("Opening the AWS MySQL database connection...")
@@ -91,7 +91,7 @@ func initDBAWS() (*sql.DB, error) {
 
 	logrus.Info("AWS MySQL database initialized successfully.")
 	return db, nil
-}
+}*/
 // insertComponentData inserts component details into the dci_components table.
 func insertComponentData(db *sql.DB, job_id, commit, createdAt string, totalSuccess, totalFailures, totalErrors, totalSkips int) error {
 	insertQuery := `
@@ -168,7 +168,7 @@ func createTables(db *sql.DB) error {
 }
 
 // chooseDatabase initializes and returns a database connection based on the DB_CHOICE environment variable
-func chooseDatabase() (*sql.DB, error) {
+func ChooseDatabase() (*sql.DB, error) {
 	dbChoice := os.Getenv("DB_CHOICE") // Expecting "local" or "aws"
 	var db *sql.DB
 	var err error
@@ -187,3 +187,114 @@ func chooseDatabase() (*sql.DB, error) {
 
 	return db, nil
 }
+
+func ConnectToAWSDB() (*sql.DB, string, error) {
+	logrus.Info("Opening the AWS MySQL database connection...")
+
+	// Fetch the database connection parameters from environment variables.
+	DBUsername := os.Getenv("DB_USER")
+	DBPassword := os.Getenv("DB_PASSWORD")
+	DBURL := os.Getenv("DB_URL")
+	DBPort := os.Getenv("DB_PORT")
+
+	// Create the initial connection string (without specifying a database).
+	initialConnStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/", DBUsername, DBPassword, DBURL, DBPort)
+	logrus.Infof("Connecting to MySQL with connection string: %s", initialConnStr)
+
+	// Connect to MySQL without specifying a database.
+	db, err := sql.Open("mysql", initialConnStr)
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to open MySQL connection: %w", err)
+	}
+
+	// Ping the database to ensure the connection is established.
+	if err := pingDB(db); err != nil {
+		return nil, "", fmt.Errorf("failed to connect to AWS MySQL database: %w", err)
+	}
+
+	// Log a successful connection and ping.
+	logrus.Info("Successfully connected to AWS MySQL and pinged the database.")
+
+	// Define the database name
+	newDBName := "certsuite_usage_db"
+
+	return db, newDBName, nil
+}
+
+func initDBAWS() (*sql.DB, error) {
+	// Connect to AWS MySQL
+	db, newDBName, err := ConnectToAWSDB()
+	if err != nil {
+		return nil, fmt.Errorf("database connection failed: %w", err)
+	}
+
+	// Create the database if it doesn't exist.
+	if err := createDatabase(db, newDBName); err != nil {
+		return nil, fmt.Errorf("failed to create database %s: %w", newDBName, err)
+	}
+
+	// Close the initial connection and reconnect with the specified database.
+	db.Close()
+	DBUsername := os.Getenv("DB_USER")
+	DBPassword := os.Getenv("DB_PASSWORD")
+	DBURL := os.Getenv("DB_URL")
+	DBPort := os.Getenv("DB_PORT")
+	finalConnStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DBUsername, DBPassword, DBURL, DBPort, newDBName)
+	logrus.Infof("Reconnecting to MySQL with new database: %s", newDBName)
+
+	db, err = sql.Open("mysql", finalConnStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to reconnect to MySQL with database %s: %w", newDBName, err)
+	}
+
+	// Ping the database again to ensure the connection is established.
+	if err := pingDB(db); err != nil {
+		return nil, fmt.Errorf("failed to connect to database %s: %w", newDBName, err)
+	}
+
+	// Log a successful reconnection and ping with the new database.
+	logrus.Infof("Successfully connected to database '%s' and pinged the database.", newDBName)
+
+	// Create tables in the new database.
+	logrus.Info("Creating tables in the database...")
+	if err := createTables(db); err != nil {
+		return nil, fmt.Errorf("failed to create tables in database %s: %w", newDBName, err)
+	}
+
+	logrus.Info("AWS MySQL database initialized successfully.")
+	return db, nil
+}
+
+func ConnectToLocalDB() (*sql.DB, error) {
+	logrus.Info("Opening the local SQLite database connection...")
+
+	db, err := sql.Open("sqlite3", "certsuite_usage.db")
+	if err != nil {
+		return nil, fmt.Errorf("failed to open SQLite database: %w", err)
+	}
+
+	if err := pingDB(db); err != nil {
+		return nil, fmt.Errorf("failed to connect to SQLite database: %w", err)
+	}
+
+	logrus.Info("Successfully connected to SQLite database.")
+	return db, nil
+}
+
+func initDBLocal() (*sql.DB, error) {
+	// Connect to SQLite
+	db, err := ConnectToLocalDB()
+	if err != nil {
+		return nil, err
+	}
+
+	// Create tables in the database
+	if err := createTables(db); err != nil {
+		return nil, fmt.Errorf("failed to create tables in SQLite database: %w", err)
+	}
+
+	logrus.Info("Local SQLite database initialized successfully.")
+	return db, nil
+}
+
+
