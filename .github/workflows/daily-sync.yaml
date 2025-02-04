@@ -3,6 +3,8 @@ name: Daily Sync
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -40,5 +42,34 @@ jobs:
           cd cmd
           go build -o ../certsuite-overview
 
-      - name: Run the certsuite-overview project
+      - name: Create Prometheus config file
+        run: |
+          cat <<EOF > ${{ github.workspace }}/prometheus.yml
+          global:
+            scrape_interval: 15s
+          scrape_configs:
+            - job_name: 'certsuite'
+              static_configs:
+                - targets: ['localhost:8080']
+          EOF
+
+      - name: Start Prometheus
+        run: |
+          docker run -d --name prometheus -p 9090:9090 -v ${{ github.workspace }}/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
+      - name: Start Grafana
+        run: |
+          docker run -d --name=grafana -p 3000:3000 grafana/grafana
+
+      - name: Fetch certsuite usage data
         run: ./certsuite-overview fetch
+
+      - name: Run certsuite-overview project
+        run: ./certsuite-overview &
+
+      - name: Wait for metrics to be available
+        run: sleep 20
+
+      - name: Check Prometheus metrics endpoint
+        run: |
+          curl -f http://localhost:9090/metrics || (echo "Metrics not available" && exit 1)
