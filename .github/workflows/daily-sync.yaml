@@ -50,9 +50,12 @@ jobs:
           scrape_configs:
             - job_name: 'certsuite'
               static_configs:
-                - targets: ['host.docker.internal:8080']
+                - targets: ['127.0.0.1:8080']
           EOF
       
+      - name: Check running Docker containers
+        run: docker ps
+
       - name: Start Prometheus
         run: |
           docker run -d --name prometheus -p 9090:9090 -v ${{ github.workspace }}/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
@@ -72,4 +75,4 @@ jobs:
 
       - name: Check Prometheus metrics endpoint
         run: |
-          curl -f http://host.docker.internal:9090/metrics || (echo "Metrics not available" && exit 1)
+          curl -f http://127.0.0.1:9090/metrics || (echo "Metrics not available" && exit 1)
