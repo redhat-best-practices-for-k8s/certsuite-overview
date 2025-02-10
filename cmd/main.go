@@ -143,6 +143,4 @@ func main() {
 		log.Println("Serving metrics at :8080/metrics")
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()
-
-	///select {}
 }

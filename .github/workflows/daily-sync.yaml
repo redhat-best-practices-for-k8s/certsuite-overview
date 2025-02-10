@@ -50,7 +50,7 @@ jobs:
           scrape_configs:
             - job_name: 'certsuite'
               static_configs:
-                - targets: ['localhost:8080']
+                - targets: ['host.docker.internal:8080']
           EOF
       
       - name: Start Prometheus
@@ -68,8 +68,8 @@ jobs:
         run: ./certsuite-overview &
 
       - name: Wait for metrics to be available
-        run: sleep 20
+        run: sleep 30
 
       - name: Check Prometheus metrics endpoint
         run: |
-          curl -f http://localhost:9090/metrics || (echo "Metrics not available" && exit 1)
+          curl -f http://host.docker.internal:9090/metrics || (echo "Metrics not available" && exit 1)
