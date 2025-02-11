@@ -50,7 +50,7 @@ jobs:
           scrape_configs:
             - job_name: 'certsuite'
               static_configs:
-                - targets: ['127.0.0.1:8080']
+                - targets: ['127.0.0.1:7000']
           EOF
       
       - name: Check running Docker containers
@@ -68,11 +68,19 @@ jobs:
         run: ./certsuite-overview fetch
 
       - name: Run certsuite-overview project
-        run: ./certsuite-overview &
+        run: |
+          ./certsuite-overview > logs.txt 2>&1 &
+          sleep 5
+          cat logs.txt
 
       - name: Wait for metrics to be available
         run: sleep 30
 
       - name: Check Prometheus metrics endpoint
         run: |
-          curl -f http://127.0.0.1:9090/metrics || (echo "Metrics not available" && exit 1)
+          sleep 10
+          curl -f http://127.0.0.1:7000/metrics || (echo "Metrics not available" && exit 1)
+
+      - name: Check Prometheus logs
+        run: docker logs prometheus
+        

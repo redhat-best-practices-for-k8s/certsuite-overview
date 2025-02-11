@@ -140,7 +140,7 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler())
 	go func() {
-		log.Println("Serving metrics at :8080/metrics")
-		log.Fatal(http.ListenAndServe(":8080", nil))
+		log.Println("Serving metrics at :7000/metrics")
+		log.Fatal(http.ListenAndServe(":7000", nil))
 	}()
 }
