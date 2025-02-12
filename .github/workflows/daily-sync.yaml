@@ -41,6 +41,7 @@ jobs:
         run: |
           cd cmd
           go build -o ../certsuite-overview
+          echo "Build successful, certsuite-overview exists at $(pwd)/certsuite-overview"
       
       - name: Verify certsuite-overview exists
         run: |
@@ -76,8 +77,9 @@ jobs:
 
       - name: Run certsuite-overview project
         run: |
-          ./certsuite-overview > logs.txt 2>&1 &
+          nohup ./certsuite-overview > logs.txt 2>&1 &
           sleep 5
+          tail -n 10 logs.txt
           for i in {1..10}; do
             if [ -s logs.txt ]; then
               break
@@ -88,8 +90,8 @@ jobs:
 
       - name: Check if certsuite-overview is running
         run: |
-          sleep 2
-          if ! pgrep -f "certsuite-overview"; then
+         sleep 2
+          if ! ps aux | grep -v grep | grep certsuite-overview; then
             echo "certsuite-overview is NOT running!"
             exit 1
           else
