@@ -77,7 +77,12 @@ jobs:
       - name: Run certsuite-overview project
         run: |
           ./certsuite-overview > logs.txt 2>&1 &
-          sleep 5
+          for i in {1..10}; do
+            if [ -s logs.txt ]; then
+              break
+            fi
+            sleep 1
+          done
           cat logs.txt
 
       - name: Check if certsuite-overview is running
