@@ -73,13 +73,18 @@ jobs:
           sleep 5
           cat logs.txt
 
-      - name: Wait for metrics to be available
-        run: sleep 30
-
-      - name: Check Prometheus metrics endpoint
+      - name: Wait for certsuite-overview to start listening
         run: |
-          sleep 10
-          curl -f http://127.0.0.1:7000/metrics || (echo "Metrics not available" && exit 1)
+          n=0
+          until [ $n -ge 5 ]; do
+            curl -f http://127.0.0.1:7000/metrics && break
+            n=$((n+1))
+            echo "Waiting for certsuite-overview to start listening on port 7000... ($n/5)"
+            sleep 10
+          done
+          if [ $n -ge 5 ]; then
+            echo "Metrics not available after 5 attempts" && exit 1
+          fi
 
       - name: Check Prometheus logs
         run: docker logs prometheus
