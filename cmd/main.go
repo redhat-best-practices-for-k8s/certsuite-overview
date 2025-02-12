@@ -139,7 +139,7 @@ func main() {
         log.Fatalf("Failed to ping database: %v", err)
     }
 
-	defer db.Close()
+	//defer db.Close()
 	go updateMetrics(db)
 
 	http.Handle("/metrics", promhttp.Handler())
