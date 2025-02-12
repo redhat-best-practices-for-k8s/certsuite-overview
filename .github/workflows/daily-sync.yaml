@@ -14,7 +14,7 @@ jobs:
     # Global environment variables for the job
     env:
       NUM_DAYS: "1"
-      DB_CHOICE: "aws"
+      DB_CHOICE: "local" # aws or local
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_URL: ${{ secrets.DB_URL }}
