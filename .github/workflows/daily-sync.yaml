@@ -3,16 +3,17 @@ name: Daily Sync
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   sync-job:
     runs-on: ubuntu-22.04
 
-    # Global environment variables for the job
     env:
       NUM_DAYS: "1"
-      DB_CHOICE: "aws"
+      DB_CHOICE: "local" # aws or local
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_URL: ${{ secrets.DB_URL }}
@@ -34,11 +35,80 @@ jobs:
 
       - name: List files in the repository
         run: ls -R
-      
+
       - name: Build certsuite-overview project
         run: |
           cd cmd
           go build -o ../certsuite-overview
+          echo "Build successful, certsuite-overview exists at $(pwd)/certsuite-overview"
+      
+      - name: Verify certsuite-overview exists
+        run: |
+          if [ ! -f ./certsuite-overview ]; then
+            echo "certsuite-overview binary is missing!"
+            exit 1
+          fi
 
-      - name: Run the certsuite-overview project
+      - name: Create Prometheus config file
+        run: |
+          cat <<EOF > ${{ github.workspace }}/prometheus.yml
+          global:
+            scrape_interval: 15s
+          scrape_configs:
+            - job_name: 'certsuite'
+              static_configs:
+                - targets: ['127.0.0.1:7000']
+          EOF
+
+      - name: Start Prometheus
+        run: |
+          docker run -d --name prometheus -p 9090:9090 -v ${{ github.workspace }}/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
+      - name: Start Grafana
+        run: |
+          docker run -d --name=grafana -p 3000:3000 grafana/grafana
+
+      - name: Fetch certsuite usage data
         run: ./certsuite-overview fetch
+
+      - name: Run certsuite-overview project
+        run: |
+          nohup ./certsuite-overview > logs.txt 2>&1 &
+          sleep 10  # wait for certsuite-overview to start
+          tail -n 10 logs.txt
+          for i in {1..10}; do
+            if [ -s logs.txt ]; then
+              break
+            fi
+            sleep 1
+          done
+          cat logs.txt
+
+      - name: Check if certsuite-overview is running
+        run: |
+          sleep 5  # wait a bit longer for certsuite-overview to be ready
+          if ! ps aux | grep -v grep | grep certsuite-overview; then
+            echo "certsuite-overview is NOT running!"
+            exit 1
+          else
+            echo "certsuite-overview is running."
+          fi
+
+      - name: Check if port 7000 is in use
+        run: netstat -tlnp || ss -tlnp
+
+      - name: Wait for certsuite-overview to start listening
+        run: |
+          n=0
+          until [ $n -ge 5 ]; do
+            curl -f http://127.0.0.1:7000/metrics && break
+            n=$((n+1))
+            echo "Waiting for certsuite-overview to start listening on port 7000... ($n/5)"
+            sleep 10
+          done
+          if [ $n -ge 5 ]; then
+            echo "Metrics not available after 5 attempts" && exit 1
+          fi
+
+      - name: Check Prometheus logs
+        run: docker logs prometheus
