@@ -77,6 +77,7 @@ jobs:
       - name: Run certsuite-overview project
         run: |
           ./certsuite-overview > logs.txt 2>&1 &
+          sleep 5
           for i in {1..10}; do
             if [ -s logs.txt ]; then
               break
@@ -87,6 +88,7 @@ jobs:
 
       - name: Check if certsuite-overview is running
         run: |
+          sleep 2
           if ! pgrep -f "certsuite-overview"; then
             echo "certsuite-overview is NOT running!"
             exit 1

@@ -134,8 +134,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	defer db.Close()
 
+	if err := db.Ping(); err != nil {
+        log.Fatalf("Failed to ping database: %v", err)
+    }
+
+	defer db.Close()
 	go updateMetrics(db)
 
 	http.Handle("/metrics", promhttp.Handler())
