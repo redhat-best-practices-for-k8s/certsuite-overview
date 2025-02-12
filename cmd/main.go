@@ -122,6 +122,7 @@ func main() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
+
 	dbChoice := os.Getenv("DB_CHOICE")
 	var db *sql.DB
 	var err error
@@ -139,7 +140,6 @@ func main() {
         log.Fatalf("Failed to ping database: %v", err)
     }
 
-	//defer db.Close()
 	go updateMetrics(db)
 
 	http.Handle("/metrics", promhttp.Handler())

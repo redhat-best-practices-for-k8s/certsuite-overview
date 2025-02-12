@@ -11,7 +11,6 @@ jobs:
   sync-job:
     runs-on: ubuntu-22.04
 
-    # Global environment variables for the job
     env:
       NUM_DAYS: "1"
       DB_CHOICE: "local" # aws or local
@@ -36,7 +35,7 @@ jobs:
 
       - name: List files in the repository
         run: ls -R
-      
+
       - name: Build certsuite-overview project
         run: |
           cd cmd
@@ -60,25 +59,22 @@ jobs:
               static_configs:
                 - targets: ['127.0.0.1:7000']
           EOF
-      
-      - name: Check running Docker containers
-        run: docker ps
 
       - name: Start Prometheus
         run: |
           docker run -d --name prometheus -p 9090:9090 -v ${{ github.workspace }}/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
-      
+
       - name: Start Grafana
         run: |
           docker run -d --name=grafana -p 3000:3000 grafana/grafana
-      
+
       - name: Fetch certsuite usage data
         run: ./certsuite-overview fetch
 
       - name: Run certsuite-overview project
         run: |
           nohup ./certsuite-overview > logs.txt 2>&1 &
-          sleep 5
+          sleep 10  # wait for certsuite-overview to start
           tail -n 10 logs.txt
           for i in {1..10}; do
             if [ -s logs.txt ]; then
@@ -90,7 +86,7 @@ jobs:
 
       - name: Check if certsuite-overview is running
         run: |
-         sleep 2
+          sleep 5  # wait a bit longer for certsuite-overview to be ready
           if ! ps aux | grep -v grep | grep certsuite-overview; then
             echo "certsuite-overview is NOT running!"
             exit 1
@@ -116,4 +112,3 @@ jobs:
 
       - name: Check Prometheus logs
         run: docker logs prometheus
-        
