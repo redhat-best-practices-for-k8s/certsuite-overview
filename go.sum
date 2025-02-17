@@ -48,8 +48,8 @@ github.com/sagikazarmark/locafero v0.6.0 h1:ON7AQg37yzcRPU69mt7gwhFEBwxI6P9T4Qu3
 github.com/sagikazarmark/locafero v0.6.0/go.mod h1:77OmuIc6VTraTXKXIs/uvUxKGUXjE1GbemJYHqdNjX0=
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
-github.com/sebrandon1/go-dci v0.0.4 h1:Kcruar09cWOPo5JHsVFDbNf85bbjCZp773yI3hHFu5E=
-github.com/sebrandon1/go-dci v0.0.4/go.mod h1:YMipqJRpp5Kjvgh7XKgOAyPuSs/1bBezHdfyzHPIqiE=
+github.com/sebrandon1/go-dci v0.0.5 h1:+QyDIolsc5CaXDrTS2qyXLavH4MNWpiZKjLZ2oMb/tM=
+github.com/sebrandon1/go-dci v0.0.5/go.mod h1:8GmCzcd/0LMsanBdBrc7KmkGbfbgO11xvyq/qzdrb5w=
 github.com/sebrandon1/go-quay v0.0.3 h1:3BjWb6JxiqLqioJPTCxchNeI3rdo6z8WKUoxKE5L/zM=
 github.com/sebrandon1/go-quay v0.0.3/go.mod h1:C2W/iLFCvf+IUW+Nva0FeKm3PqvCDqjh8zER2ANCbHk=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=

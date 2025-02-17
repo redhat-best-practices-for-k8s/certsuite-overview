@@ -1,7 +1,6 @@
 module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
 go 1.23.5
-
 require github.com/go-sql-driver/mysql v1.8.1
 
 require (
@@ -37,7 +36,7 @@ require (
 	github.com/aws/aws-sdk-go v1.55.6 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.24
-	github.com/sebrandon1/go-dci v0.0.4
+	github.com/sebrandon1/go-dci v0.0.5
 	github.com/sebrandon1/go-quay v0.0.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
