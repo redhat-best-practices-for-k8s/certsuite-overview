@@ -9,34 +9,96 @@
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT UNIX_TIMESTAMP(datetime) AS time, kind, count AS value FROM aggregated_logs ORDER BY time ASC;",
+              "rawSql": "SELECT UNIX_TIMESTAMP(datetime) AS time, DATE_FORMAT(datetime, '%Y-%m-%d %H:%i:%s') AS date_label, kind, count AS value FROM aggregated_logs ORDER BY time ASC;",
               "format": "time_series"
             }
           ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "lineWidth": 2,
-                "fillOpacity": 30
+                "lineWidth": 3,
+                "fillOpacity": 50
               }
             }
           }
         },
         {
-          "title": "DCI Test Runs",
+          "title": "Quay Pull Events by Month",
           "type": "timeseries",
           "targets": [
             {
               "datasource": "MySQL",
-              "rawSql": "SELECT UNIX_TIMESTAMP(createdAt) AS time, job_id, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips FROM dci_components GROUP BY job_id, time ORDER BY time ASC;",
+              "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(datetime, '%Y-%m-01')) AS time, kind, SUM(count) AS value FROM aggregated_logs GROUP BY kind, time ORDER BY time ASC;",
               "format": "time_series"
             }
           ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
           "fieldConfig": {
             "defaults": {
               "custom": {
                 "lineWidth": 2,
-                "fillOpacity": 30
+                "fillOpacity": 40
+              }
+            }
+          }
+        },
+        {
+          "title": "DCI Test Runs Over Time",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT UNIX_TIMESTAMP(createdAt) AS time, DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s') AS date_label, job_id, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips, ROUND((SUM(totalFailures) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS failure_percentage, ROUND((SUM(totalSuccess) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS success_percentage, ROUND((SUM(totalErrors) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS error_percentage, ROUND((SUM(totalSkips) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS skip_percentage FROM dci_components GROUP BY job_id, time ORDER BY time ASC;",
+              "format": "time_series"
+            }
+          ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 3,
+                "fillOpacity": 50
+              }
+            }
+          }
+        },
+        {
+          "title": "DCI Test Runs by Month",
+          "type": "timeseries",
+          "targets": [
+            {
+              "datasource": "MySQL",
+              "rawSql": "SELECT UNIX_TIMESTAMP(DATE_FORMAT(createdAt, '%Y-%m-01')) AS time, SUM(totalSuccess) AS success, SUM(totalFailures) AS failures, SUM(totalErrors) AS errors, SUM(totalSkips) AS skips, ROUND((SUM(totalFailures) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS failure_percentage, ROUND((SUM(totalSuccess) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS success_percentage, ROUND((SUM(totalErrors) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS error_percentage, ROUND((SUM(totalSkips) / (SUM(totalSuccess) + SUM(totalFailures) + SUM(totalErrors) + SUM(totalSkips))) * 100, 2) AS skip_percentage FROM dci_components GROUP BY time ORDER BY time ASC;",
+              "format": "time_series"
+            }
+          ],
+          "options": {
+            "tooltip": {
+              "mode": "all",
+              "sort": "desc"
+            }
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "lineWidth": 2,
+                "fillOpacity": 40
               }
             }
           }
