@@ -35,12 +35,12 @@ func FetchQuayData() error {
 	}
 
 	// Get date range
-	startDate, endDate := getTodayAndYesterday()
+	//startDate, endDate := getDateRangeLastYear()
 
-	log.Printf("Fetching Quay data for the date range: %s - %s", startDate, endDate)
+	//log.Printf("Fetching Quay data for the date range: %s - %s", startDate, endDate)
 
 	// Fetch aggregated logs from Quay
-	data, err := quayClient.GetAggregatedLogs(config.AppConfig.Namespace, config.AppConfig.Repository, startDate, endDate)
+	data, err := quayClient.GetAggregatedLogs(config.AppConfig.Namespace, config.AppConfig.Repository, "", "")
 	if err != nil {
 		return fmt.Errorf("failed to fetch aggregated logs from Quay: %w", err)
 	}
@@ -61,17 +61,16 @@ func FetchQuayData() error {
 	return nil
 }
 
-// getTodayAndYesterday returns today's date and yesterday's date (24 hours before) in string format
-func getTodayAndYesterday() (string, string) {
+func getDateRangeLastYear() (string, string) {
 	// Get the current time
 	today := time.Now()
 
 	// Format today's date as a string
 	todayStr := today.Format(DateFormat)
 
-	// Calculate yesterday's date by subtracting 24 hours
-	yesterday := today.Add(-24 * time.Hour)
-	yesterdayStr := yesterday.Format(DateFormat)
+	// Calculate the date one year ago
+	lastYear := today.AddDate(-1, 0, 0)
+	lastYearStr := lastYear.Format(DateFormat)
 
-	return yesterdayStr, todayStr
+	return lastYearStr, todayStr
 }

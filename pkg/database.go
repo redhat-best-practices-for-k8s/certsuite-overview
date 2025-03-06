@@ -3,7 +3,9 @@ package pkg
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -31,20 +33,93 @@ func insertComponentData(db *sql.DB, jobID, commit, createdAt string, totalSucce
 	_, err := db.Exec(insertQuery, jobID, commit, createdAt, totalSuccess, totalFailures, totalErrors, totalSkips)
 	return err
 }
-
+/*
 // insertQuayData inserts a record of Quay image pulls into the database.
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
+	var err error
+	log.Printf(datetime)
 	if datetime == "" || kind == "" || count < 0 {
         return fmt.Errorf("datetime or kind cannot be empty: datetime=%v, kind=%v", datetime, kind)
     }
+	parsedTime, err := time.Parse(time.RFC1123, datetime)
+	if err != nil {
+		return fmt.Errorf("failed to parse datetime: %w", err)
+	}
+	formattedDate := parsedTime.Format("01/02/2006")
+	log.Printf(formattedDate)
 	insertQuery := `
         INSERT INTO aggregated_logs (datetime, count, kind) 
         VALUES (?, ?, ?)
         ON DUPLICATE KEY UPDATE 
         count = count + VALUES(count);
     `
-	_, err := db.Exec(insertQuery, datetime, count, kind)
+	log.Printf("Executing query: %v", insertQuery)
+	_, err = db.Exec(insertQuery, formattedDate, count, kind)
 	return err
+}
+*/
+
+func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
+	var err error
+	log.Printf("Received datetime: %v, count: %v, kind: %v", datetime, count, kind)
+
+	if datetime == "" || kind == "" || count < 0 {
+        return fmt.Errorf("datetime or kind cannot be empty: datetime=%v, kind=%v", datetime, kind)
+    }
+
+	parsedTime, err := time.Parse(time.RFC1123, datetime)
+	if err != nil {
+    	return fmt.Errorf("failed to parse datetime: %w", err)
+	}
+
+	formattedDate := parsedTime.Format("2006-01-02")
+	
+	log.Printf("formattedDate:%v", formattedDate)
+	log.Printf("Inserting: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
+	// Define the insert query with ON DUPLICATE KEY UPDATE
+	insertQuery := `
+    INSERT INTO aggregated_logs (datetime, count, kind)
+	VALUES (DATE(?), ?, ?)
+	ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
+
+	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
+	_, err = db.Exec(insertQuery, formattedDate, count, kind)
+	if err != nil {
+		log.Printf("Error executing insert query: %v", err)
+	}
+	printAggregatedLogs(db)
+	return err
+}
+
+func printAggregatedLogs(db *sql.DB) {
+	// Query to fetch all rows from aggregated_logs table
+	rows, err := db.Query("SELECT datetime, count, kind FROM aggregated_logs ORDER BY datetime ASC, kind ASC")
+	if err != nil {
+		log.Printf("Error fetching data from aggregated_logs: %v", err)
+		return
+	}
+	defer rows.Close()
+
+	// Iterate through the rows and print the results
+	for rows.Next() {
+		var datetime string
+		var count int
+		var kind string
+
+		err := rows.Scan(&datetime, &count, &kind)
+		if err != nil {
+			log.Printf("Error scanning row: %v", err)
+			return
+		}
+
+		// Print each row
+		log.Printf("datetime: %v, count: %v, kind: %v", datetime, count, kind)
+	}
+
+	// Check for any errors that occurred during iteration
+	if err := rows.Err(); err != nil {
+		log.Printf("Error iterating over rows: %v", err)
+	}
 }
 
 // pingDB verifies the database connection.
@@ -75,11 +150,12 @@ func createTables(db *sql.DB) error {
 
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS aggregated_logs (
-			datetime DATETIME NOT NULL,  
-			count INT NOT NULL,  
+			datetime DATE NOT NULL,   
+			count INT NOT NULL DEFAULT 0,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY (datetime, kind)
+			PRIMARY KEY (datetime, kind)			
 		);`,
+		
 		`CREATE TABLE IF NOT EXISTS dci_components (
 			job_id VARCHAR(36) PRIMARY KEY,       
 			commit_hash VARCHAR(255) NOT NULL,  
