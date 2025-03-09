@@ -80,7 +80,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	insertQuery := `
     INSERT INTO aggregated_logs (datetime, count, kind)
     VALUES (?, ?, ?)
-    ON DUPLICATE KEY UPDATE count = IFNULL(count, 0) + VALUES(count);`
+    ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
 
 
 	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
