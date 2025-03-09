@@ -156,7 +156,7 @@ func createTables(db *sql.DB) error {
 			datetime DATE NOT NULL,   
 			count INT NOT NULL DEFAULT 0,  
 			kind VARCHAR(255) NOT NULL,  
-			PRIMARY KEY (datetime, kind)			
+			PRIMARY KEY (datetime, kind)		
 		);`,
 		
 		`CREATE TABLE IF NOT EXISTS dci_components (
