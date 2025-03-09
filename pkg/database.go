@@ -83,13 +83,21 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	ON DUPLICATE KEY UPDATE count = count + ?;`
 
 	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
+	if err := db.Ping(); err != nil {
+		log.Printf("Failed to ping DB: %v", err)
+	}
+	log.Printf("ping to db excellent")
+	log.Printf("Executing query: %s with values formattedDate=%v, count=%v, kind=%v, count again=%v", insertQuery, formattedDate, count, kind, count)
 	res, err := db.Exec(insertQuery, formattedDate, count, kind, count)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
 	}
-	rowsAffected, _ := res.RowsAffected()
-	log.Printf("✅ Query executed successfully. Rows affected: %d", rowsAffected)
-
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+    	log.Printf("Error fetching rows affected: %v", err)
+	} else {
+    log.Printf("✅ Query executed successfully. Rows affected: %d", rowsAffected)
+	}
 	printAggregatedLogs(db)
 	return err
 }
