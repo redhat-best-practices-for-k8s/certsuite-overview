@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -67,15 +66,6 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
         return fmt.Errorf("datetime or kind cannot be empty: datetime=%v, kind=%v", datetime, kind)
     }
 
-	parsedTime, err := time.Parse(time.RFC1123, datetime)
-	if err != nil {
-    	return fmt.Errorf("failed to parse datetime: %w", err)
-	}
-
-	formattedDate := parsedTime.Format("2006-01-02")
-	
-	log.Printf("formattedDate:%v", formattedDate)
-	log.Printf("Inserting: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
 	// Define the insert query with ON DUPLICATE KEY UPDATE
 	insertQuery := `
     INSERT INTO aggregated_logs (datetime, count, kind)
@@ -83,13 +73,13 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
     ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
 
 
-	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
+	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", datetime, count, kind)
 	if err := db.Ping(); err != nil {
 		log.Printf("Failed to ping DB: %v", err)
 	}
 	log.Printf("ping to db excellent")
-	log.Printf("Executing query: %s with values formattedDate=%v, count=%v, kind=%v, count again=%v", insertQuery, formattedDate, count, kind, count)
-	res, err := db.Exec(insertQuery, formattedDate, count, kind)
+	log.Printf("Executing query: %s with values formattedDate=%v, count=%v, kind=%v", insertQuery,  datetime, count, kind)
+	res, err := db.Exec(insertQuery,  datetime, count, kind)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
 	}
@@ -162,7 +152,7 @@ func createTables(db *sql.DB) error {
 
 	queries := []string{
 		`CREATE TABLE IF NOT EXISTS aggregated_logs (
-			datetime DATE NOT NULL,   
+			datetime  DATETIME NOT NULL,   
 			count INT NOT NULL DEFAULT 0,  
 			kind VARCHAR(255) NOT NULL,  
 			PRIMARY KEY (datetime, kind)		
