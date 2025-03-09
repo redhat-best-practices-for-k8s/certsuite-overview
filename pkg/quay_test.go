@@ -9,17 +9,17 @@ import (
 
 const DateTemplate = "01/02/2006" // Example format for dates
 
-func TestGetTodayAndYesterday(t *testing.T) {
-
+func TestGetDateRangeLastYear(t *testing.T) {
+	// Define test cases
 	tests := []struct {
-		name              string
-		expectedToday     string
-		expectedYesterday string
+		name            string
+		expectedToday   string
+		expectedLastYear string
 	}{
 		{
-			name:              "Regular Day",
-			expectedToday:     time.Now().Format(DateTemplate),
-			expectedYesterday: time.Now().Add(-24 * time.Hour).Format(DateTemplate),
+			name:            "Regular Case - One Year Range",
+			expectedToday:   time.Now().Format(DateFormat),
+			expectedLastYear: time.Now().AddDate(-1, 0, 0).Format(DateFormat),
 		},
 	}
 
@@ -27,11 +27,11 @@ func TestGetTodayAndYesterday(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			// Call the function
-			actualYesterday, actualToday := getTodayAndYesterday()
+			actualLastYear, actualToday := getDateRangeLastYear()
 
 			// Validate the results with assertions
 			assert.Equal(t, tc.expectedToday, actualToday, "Mismatch for today in test: %s", tc.name)
-			assert.Equal(t, tc.expectedYesterday, actualYesterday, "Mismatch for yesterday in test: %s", tc.name)
+			assert.Equal(t, tc.expectedLastYear, actualLastYear, "Mismatch for last year in test: %s", tc.name)
 		})
 	}
 }
