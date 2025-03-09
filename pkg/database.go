@@ -89,7 +89,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	}
 	log.Printf("ping to db excellent")
 	log.Printf("Executing query: %s with values formattedDate=%v, count=%v, kind=%v, count again=%v", insertQuery, formattedDate, count, kind, count)
-	res, err := db.Exec(insertQuery, formattedDate, count, kind, count)
+	res, err := db.Exec(insertQuery, formattedDate, count, kind)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
 	}
