@@ -60,7 +60,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 */
 
 func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
-	var err error
+	//var err error
 	log.Printf("Received datetime: %v, count: %v, kind: %v", datetime, count, kind)
 
 	if datetime == "" || kind == "" || count < 0 {
@@ -83,10 +83,13 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	ON DUPLICATE KEY UPDATE count = count + ?;`
 
 	log.Printf("Before inserting to DB: datetime=%v, count=%v, kind=%v", formattedDate, count, kind)
-	_, err = db.Exec(insertQuery, formattedDate, count, kind, count)
+	res, err := db.Exec(insertQuery, formattedDate, count, kind, count)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
 	}
+	rowsAffected, _ := res.RowsAffected()
+	log.Printf("✅ Query executed successfully. Rows affected: %d", rowsAffected)
+
 	printAggregatedLogs(db)
 	return err
 }
