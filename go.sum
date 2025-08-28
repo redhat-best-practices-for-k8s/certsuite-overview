@@ -38,8 +38,8 @@ github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/f
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sagikazarmark/locafero v0.7.0 h1:5MqpDsTGNDhY8sGp0Aowyf0qKsPrhewaLSsFaodPcyo=
 github.com/sagikazarmark/locafero v0.7.0/go.mod h1:2za3Cg5rMaTMoG/2Ulr9AwtFaIppKXTRYnozin4aB5k=
-github.com/sebrandon1/go-dci v0.0.16 h1:DKwP0h3gm44RBhYvWKqPP6HH4G8c+CS50ZSHXIRSxGY=
-github.com/sebrandon1/go-dci v0.0.16/go.mod h1:CAjuAHCX4t2h01b+/Q1bwjUbGhvQz/H8dir7+RnwKD8=
+github.com/sebrandon1/go-dci v0.0.17 h1:981Nvm0gNpUslFtR+cw7j8CfLiIF4NyOhHKDKB4UzSM=
+github.com/sebrandon1/go-dci v0.0.17/go.mod h1:qCcpVKE6JOjwRNt0wGiPHhliiI+bVNt1ddtlrVfzq48=
 github.com/sebrandon1/go-quay v0.0.12 h1:cjc/K2XfbX29y/XQ91bQtlKAWE6FnQF4yWtcnL3V5bg=
 github.com/sebrandon1/go-quay v0.0.12/go.mod h1:J8X0kkQNhZdQ0Zdr+tCkdGB0bJ0US6R239HWjnniEMI=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
