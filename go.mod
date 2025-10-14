@@ -1,6 +1,6 @@
 module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
-go 1.25.1
+go 1.25.3
 
 require github.com/go-sql-driver/mysql v1.9.3
 
