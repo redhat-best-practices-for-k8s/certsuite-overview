@@ -5,7 +5,7 @@ go 1.25.3
 require github.com/go-sql-driver/mysql v1.9.3
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.39.3 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.39.4 // indirect
 	github.com/aws/smithy-go v1.23.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
@@ -31,7 +31,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	github.com/sebrandon1/go-dci v0.0.23
+	github.com/sebrandon1/go-dci v0.0.24
 	github.com/sebrandon1/go-quay v0.0.16
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.21.0
