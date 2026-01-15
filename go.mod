@@ -33,7 +33,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/sebrandon1/go-dci v0.0.31
 	github.com/sebrandon1/go-quay v0.0.19
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	gopkg.in/yaml.v3 v3.0.1 // indirect
