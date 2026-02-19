@@ -29,7 +29,7 @@ require (
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/sebrandon1/go-dci v0.0.34
 	github.com/sebrandon1/go-quay v0.0.34
