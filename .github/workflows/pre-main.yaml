@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-
+permissions: read-all
 jobs:
   lint-and-vet:
     runs-on: ubuntu-24.04
