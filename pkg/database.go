@@ -55,7 +55,7 @@ func insertQuayData(db *sql.DB, datetime string, count int, kind string) error {
 	VALUES (?, ?, ?)
 	ON DUPLICATE KEY UPDATE count = count + VALUES(count);`
 
-	log.Printf("🚀 Inserting into DB: datetime=%s, count=%d, kind=%s", dateStr, count, kind)
+	log.Printf("\U0001f680 Inserting into DB: datetime=%s, count=%d, kind=%s", dateStr, count, kind)
 	_, err = db.Exec(insertQuery, dateStr, count, kind)
 	if err != nil {
 		log.Printf("Error executing insert query: %v", err)
@@ -151,7 +151,7 @@ func ConnectToAWSDB() (*sql.DB, string, error) {
 
 	// Create the initial connection string (without specifying a database).
 	initialConnStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/", DBUsername, DBPassword, DBURL, DBPort)
-	logrus.Infof("Connecting to MySQL with connection string: %s", initialConnStr)
+	logrus.Infof("Connecting to MySQL at %s:%s", DBURL, DBPort)
 
 	// Connect to MySQL without specifying a database.
 	db, err := sql.Open("mysql", initialConnStr)
