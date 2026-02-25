@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Repository Overview
 
@@ -132,7 +132,7 @@ Stores DCI test run data:
 ## Development Guidelines
 
 ### Go Version
-This project uses Go 1.25.4. Ensure your local environment matches this version.
+This project uses Go 1.26.0. Ensure your local environment matches this version.
 
 ### Linting
 The project uses `golangci-lint` for code quality. Run before committing:
