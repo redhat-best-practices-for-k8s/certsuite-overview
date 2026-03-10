@@ -132,7 +132,7 @@ Stores DCI test run data:
 ## Development Guidelines
 
 ### Go Version
-This project uses Go 1.26.0. Ensure your local environment matches this version.
+This project uses Go 1.26.1. Ensure your local environment matches this version.
 
 ### Linting
 The project uses `golangci-lint` for code quality. Run before committing:
