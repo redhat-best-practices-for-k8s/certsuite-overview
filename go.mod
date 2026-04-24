@@ -7,8 +7,8 @@ toolchain go1.26.2
 require github.com/go-sql-driver/mysql v1.9.3
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.41.5 // indirect
-	github.com/aws/smithy-go v1.24.2 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.41.6 // indirect
+	github.com/aws/smithy-go v1.25.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
@@ -33,7 +33,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	github.com/sebrandon1/go-dci v0.0.40
+	github.com/sebrandon1/go-dci v1.0.0
 	github.com/sebrandon1/go-quay v1.0.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/viper v1.21.0
