@@ -32,7 +32,7 @@ require (
 	filippo.io/edwards25519 v1.2.0 // indirect
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/sebrandon1/go-dci v1.0.9
-	github.com/sebrandon1/go-quay v1.0.9
+	github.com/sebrandon1/go-quay v1.1.0
 	github.com/sirupsen/logrus v1.10.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
