@@ -9,7 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/sebrandon1/go-dci v1.0.9
 	github.com/sebrandon1/go-quay v1.0.9
-	github.com/sirupsen/logrus v1.10.1
+	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
