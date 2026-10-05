@@ -1,13 +1,11 @@
 module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
-go 1.27
-
-toolchain go1.27.1
+go 1.27.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/go-sql-driver/mysql v1.10.1
-	github.com/sebrandon1/go-dci v1.0.9
+	github.com/sebrandon1/go-dci v1.0.10
 	github.com/sebrandon1/go-quay v1.0.9
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
@@ -17,8 +15,8 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.2.0 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.43.6 // indirect
-	github.com/aws/smithy-go v1.27.8 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.47.1 // indirect
+	github.com/aws/smithy-go v1.28.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -30,6 +28,6 @@ require (
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
 )
