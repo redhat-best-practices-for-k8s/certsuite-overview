@@ -1,6 +1,6 @@
 module github.com/redhat-best-practices-for-k8s/certsuite-overview
 
-go 1.27.3
+go 1.27.4
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
