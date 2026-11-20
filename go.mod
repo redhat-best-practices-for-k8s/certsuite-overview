@@ -4,7 +4,7 @@ go 1.27.4
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	github.com/go-sql-driver/mysql v1.10.1
+	github.com/go-sql-driver/mysql v1.10.2
 	github.com/sebrandon1/go-dci v1.1.2
 	github.com/sebrandon1/go-quay v1.0.9
 	github.com/sirupsen/logrus v1.10.2
